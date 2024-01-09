@@ -1,6 +1,6 @@
 ﻿namespace LearningAPI.Models
 {
-    public class TutorialDTO
+    public class RewardDTO
     {
         public int Id { get; set; }
 
