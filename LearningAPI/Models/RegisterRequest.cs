@@ -19,6 +19,5 @@ namespace LearningAPI.Models
             ErrorMessage = "At least 1 letter and 1 number")]
         public string Password { get; set; } = string.Empty;
 
-        public int Points { get; set; } 
     }
 }

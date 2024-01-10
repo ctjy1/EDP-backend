@@ -36,7 +36,6 @@ namespace LearningAPI.Controllers
                 request.Name = request.Name.Trim();
                 request.Email = request.Email.Trim().ToLower();
                 request.Password = request.Password.Trim();
-                request.Points = 0;
 
                 // Check email
                 var foundUser = _context.Users.Where(x => x.Email == request.Email).FirstOrDefault();
@@ -54,6 +53,7 @@ namespace LearningAPI.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     Password = passwordHash,
+                    Points = 0,
                     CreatedAt = now,
                     UpdatedAt = now
                 };
