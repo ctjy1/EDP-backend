@@ -18,5 +18,6 @@ namespace LearningAPI.Models
         [RegularExpression(@"^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$",
             ErrorMessage = "At least 1 letter and 1 number")]
         public string Password { get; set; } = string.Empty;
+
     }
 }

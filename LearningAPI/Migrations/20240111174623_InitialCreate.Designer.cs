@@ -11,42 +11,56 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230720014415_AddUser")]
-    partial class AddUser
+    [Migration("20240111174623_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
+            modelBuilder.Entity("LearningAPI.Models.Reward", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("DeletedAt")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Title")
+                    b.Property<int>("Discount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("PointsRequired")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RedeemedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RewardName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tutorials");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Rewards");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.User", b =>
@@ -79,6 +93,22 @@ namespace LearningAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Reward", b =>
+                {
+                    b.HasOne("LearningAPI.Models.User", "User")
+                        .WithMany("Rewards")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.User", b =>
+                {
+                    b.Navigation("Rewards");
                 });
 #pragma warning restore 612, 618
         }
