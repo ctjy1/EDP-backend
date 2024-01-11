@@ -18,6 +18,8 @@ namespace LearningAPI.Models
         [MaxLength(100), JsonIgnore]
         public string Password { get; set; } = string.Empty;
 
+        public int Points { get; set; } = 0;
+
         [Column(TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }
 

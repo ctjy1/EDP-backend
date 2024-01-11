@@ -53,7 +53,7 @@ namespace LearningAPI.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     Password = passwordHash,
-                    
+                    Points = 0,
                     CreatedAt = now,
                     UpdatedAt = now
                 };
