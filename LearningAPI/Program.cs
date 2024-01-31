@@ -1,13 +1,15 @@
-using AutoMapper;
-using LearningAPI;
+using UPlay;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using AutoMapper;
+using LearningAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<MyDbContext>();
 
@@ -20,35 +22,37 @@ IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 // Add CORS policy
-var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+var allowedOrigins = builder.Configuration.GetSection(
+"AllowedOrigins").Get<string[]>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.WithOrigins(allowedOrigins)
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-        });
+    policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+    });
 });
 
 // Authentication
 var secret = builder.Configuration.GetValue<string>("Authentication:Secret");
 builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
     {
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(secret)
-            ),
-        };
-    });
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+    Encoding.UTF8.GetBytes(secret)
+    ),
+    };
+});
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -70,10 +74,11 @@ builder.Services.AddSwaggerGen(options =>
     };
     options.AddSecurityDefinition("Bearer", securityScheme);
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        { securityScheme, new List<string>() }
-    });
+{
+{ securityScheme, new List<string>() }
 });
+});
+
 
 var app = builder.Build();
 
@@ -85,10 +90,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseCors();
+
 app.UseStaticFiles();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

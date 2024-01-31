@@ -1,7 +1,10 @@
-﻿using LearningAPI.Models;
+﻿// MyDbContext.cs
+using LearningAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using UPlay.Models;
 
-namespace LearningAPI
+namespace UPlay
 {
     public class MyDbContext : DbContext
     {
@@ -15,14 +18,15 @@ namespace LearningAPI
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string? connectionString = _configuration.GetConnectionString("MyConnection");
+
             if (connectionString != null)
             {
                 optionsBuilder.UseMySQL(connectionString);
             }
         }
 
-        public DbSet<Tutorial> Tutorials { get; set; }
-
+        public DbSet<Gallery> Galleries { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ReferralTracking> ReferralTrackings { get; set; }
     }
 }
