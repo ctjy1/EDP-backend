@@ -4,7 +4,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace LearningAPI.Migrations
+namespace Uplay.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

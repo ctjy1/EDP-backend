@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using LearningAPI.Models;
+using Uplay.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace LearningAPI.Controllers
+namespace Uplay.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -68,7 +68,35 @@ namespace LearningAPI.Controllers
             }
         }
 
-        [HttpPost, Authorize]
+		[HttpGet("{id}/similar_rewards")]
+		[ProducesResponseType(typeof(IEnumerable<RewardDTO>), StatusCodes.Status200OK)]
+		public IActionResult GetSimilarRewards(int id, string? search)
+		{
+			try
+			{
+				var reward = _context.Rewards.Find(id);
+				if (reward == null)
+				{
+					return NotFound();
+				}
+
+				var list = _context.Rewards
+					.Where(r => r.RewardName == reward.RewardName && r.DeletedAt == null &&
+								(search == null || EF.Functions.Like(r.RewardName, $"%{search}%") || EF.Functions.Like(r.Description, $"%{search}%")))
+					.Include(t => t.User)
+					.ToList();
+
+				var data = _mapper.Map<IEnumerable<RewardDTO>>(list);
+				return Ok(data);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when getting similar rewards");
+				return StatusCode(500);
+			}
+		}
+
+		[HttpPost, Authorize]
         [ProducesResponseType(typeof(RewardDTO), StatusCodes.Status200OK)]
         public IActionResult AddReward(AddRewardRequest reward)
         {
@@ -83,6 +111,7 @@ namespace LearningAPI.Controllers
                     Discount = reward.Discount,
                     PointsRequired = reward.PointsRequired,
                     ExpiryDate = reward.ExpiryDate,
+                    DeletedAt = null,
                     UserId = userId
                 };
 
@@ -133,6 +162,11 @@ namespace LearningAPI.Controllers
                 if (reward.PointsRequired != null)
                 {
                     myReward.PointsRequired = reward.PointsRequired;
+                }
+
+                if (reward.ExpiryDate != null)
+                {
+                    myReward.ExpiryDate = reward.ExpiryDate;
                 }
 
                 _context.SaveChanges();

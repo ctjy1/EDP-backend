@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Uplay;
 
@@ -10,9 +11,11 @@ using Uplay;
 namespace Uplay.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240201164228_ChangeModelExpiryDate")]
+    partial class ChangeModelExpiryDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +28,7 @@ namespace Uplay.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DeletedAt")
+                    b.Property<DateTime>("DeletedAt")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
@@ -37,16 +40,13 @@ namespace Uplay.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<int>("PointsRequired")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("RedeemedAt")
+                    b.Property<DateTime>("RedeemedAt")
                         .HasColumnType("datetime");
-
-                    b.Property<int?>("RedeemedBy")
-                        .HasColumnType("int");
 
                     b.Property<string>("RewardName")
                         .IsRequired()

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using LearningAPI.Models;
+using Uplay.Models;
 
-namespace LearningAPI
+namespace Uplay
 {
     public class MappingProfile : Profile
     {

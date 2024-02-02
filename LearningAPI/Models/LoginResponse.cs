@@ -1,4 +1,4 @@
-﻿namespace LearningAPI.Models
+﻿namespace Uplay.Models
 {
     public class LoginResponse
     {

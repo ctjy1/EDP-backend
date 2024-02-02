@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace LearningAPI.Models
+namespace Uplay.Models
 {
     public class RewardDTO
     {
@@ -17,8 +17,10 @@ namespace LearningAPI.Models
 
         public DateTime ExpiryDate { get; set; }
 
-        public DateTime RedeemedAt { get; set; }
-        public DateTime DeletedAt { get; set; }
+        public DateTime? RedeemedAt { get; set; }
+
+        public int? RedeemedBy { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         public int UserId { get; set; }
 

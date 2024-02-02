@@ -1,9 +1,9 @@
-﻿using LearningAPI.Models;
+﻿using Uplay.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NanoidDotNet;
 
-namespace LearningAPI.Controllers
+namespace Uplay.Controllers
 {
     [Route("[controller]")]
     [ApiController]

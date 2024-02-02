@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace LearningAPI.Models
+namespace Uplay.Models
 {
     public class Reward
     {
@@ -20,14 +21,17 @@ namespace LearningAPI.Models
         [Required]
         public int PointsRequired { get; set; }
 
-        [Required, Column(TypeName = "datetime")]
+        [Required, Column(TypeName = "date")]
         public DateTime ExpiryDate { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public DateTime RedeemedAt { get; set; }
+        [AllowNull, Column(TypeName = "datetime")]
+        public DateTime? RedeemedAt { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public DateTime DeletedAt { get; set; }
+        [AllowNull]
+        public int? RedeemedBy { get; set; }
+
+        [AllowNull, Column(TypeName = "datetime")]
+        public DateTime? DeletedAt { get; set; }
 
         // Foreign key property
         public int UserId { get; set; }

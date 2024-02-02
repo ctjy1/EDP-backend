@@ -1,7 +1,7 @@
-﻿using LearningAPI.Models;
+﻿using Uplay.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LearningAPI
+namespace Uplay
 {
     public class MyDbContext : DbContext
     {

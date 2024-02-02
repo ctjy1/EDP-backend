@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LearningAPI.Models
+namespace Uplay.Models
 {
     public class AddRewardRequest
     {
@@ -17,13 +17,8 @@ namespace LearningAPI.Models
         [Required]
         public int PointsRequired { get; set; }
 
-        [Required, Column(TypeName = "datetime")]
+        [Required, Column(TypeName = "date")]
         public DateTime ExpiryDate { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public DateTime RedeemedAt { get; set; }
-
-        [Column(TypeName = "datetime")]
-        public DateTime DeletedAt { get; set; }
     }
 }
