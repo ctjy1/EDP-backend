@@ -7,6 +7,10 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using SendGrid.Helpers.Mail;
+using SendGrid;
+using UPlay.Services;
 
 namespace UPlay.Controllers
 {
@@ -17,12 +21,20 @@ namespace UPlay.Controllers
         private readonly MyDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-        public UserController(MyDbContext context, IConfiguration configuration, IMapper mapper)
+        //private readonly ILogger _logger;
+        private readonly UserService _userService;
+        private readonly EmailService _emailService;
+
+        public UserController(MyDbContext context, IConfiguration configuration, IMapper mapperr /*, UserService userService, EmailService emailService,, ILogger logger*/)
         {
             _context = context;
             _configuration = configuration;
-            _mapper = mapper;
+            //_mapper = mapper;
+            //_userService = userService;
+            //_emailService = emailService;
+            //_logger = logger;
         }
+
 
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
@@ -36,13 +48,11 @@ namespace UPlay.Controllers
             request.Email = request.Email.Trim().ToLower();
             request.Password = request.Password.Trim();
 
-            // Check email
-            var foundUser = _context.Users.Where(
-            x => x.Email == request.Email).FirstOrDefault();
+            // Check if email already exists
+            var foundUser = _context.Users.FirstOrDefault(x => x.Email == request.Email);
             if (foundUser != null)
             {
-                string message = "Email already exists.";
-                return BadRequest(new { message });
+                return BadRequest(new { message = "Email already exists." });
             }
 
             // Create user object
@@ -63,14 +73,32 @@ namespace UPlay.Controllers
                 UpdatedAt = now
             };
 
-            // Generate referral code for this specific user
-            user.GenerateReferralCode(); // Call GenerateReferralCode on the user instance
+            // Generate and assign referral code to the user
+            user.GenerateReferralCode();
 
-            // Add user
+            // Add user to the database
             _context.Users.Add(user);
             _context.SaveChanges();
-            return Ok();
 
+            // Check if a valid referral code is provided and record the referral
+            if (!string.IsNullOrEmpty(request.ReferredCode))
+            {
+                var referringUser = _context.Users.FirstOrDefault(u => u.ReferralCode == request.ReferredCode);
+                if (referringUser != null)
+                {
+                    var referralTracking = new ReferralTracking
+                    {
+                        UserId = user.Id, // ID of the newly registered user
+                        ReferringUserId = referringUser.Id,
+                        Status = "Pending" // Example initial status
+                    };
+
+                    _context.ReferralTrackings.Add(referralTracking);
+                    _context.SaveChanges();
+                }
+            }
+
+            return Ok();
         }
 
         [HttpPost("login")]
@@ -97,15 +125,9 @@ namespace UPlay.Controllers
             var user = new
             {
                 foundUser.Id,
-                foundUser.Email,
-                foundUser.Username,
-                foundUser.FirstName,
-                foundUser.LastName,
-                foundUser.ContactNumber,
-                foundUser.Address1,
-                foundUser.Address2,
-                foundUser.ReferralCode,
-                foundUser.ReferredCode
+                foundUser.Email, foundUser.Username,
+                foundUser.FirstName, foundUser.LastName, foundUser.ContactNumber,
+                foundUser.Address1, foundUser.Address2, foundUser.ReferralCode, foundUser.ReferredCode
 
             };
             string accessToken = CreateToken(foundUser);
@@ -134,6 +156,7 @@ namespace UPlay.Controllers
             new Claim("Address2", user.Address2 ?? ""),
             new Claim("ReferralCode", user.ReferralCode),
 
+            new Claim("UserRole", user.UserRole), // Add this line
 
             }),
                 Expires = DateTime.UtcNow.AddDays(tokenExpiresDays),
@@ -181,6 +204,88 @@ namespace UPlay.Controllers
                 return Unauthorized();
             }
         }
+
+        [HttpPost("change-password/{id}"), Authorize]
+        public IActionResult ChangePassword(int id, [FromBody] ChangePassword request)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = _context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // Verify the old password
+            if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, user.Password))
+            {
+                return BadRequest("Incorrect old password");
+            }
+
+            // Check if new password and confirm password match
+            if (request.NewPassword != request.ConfirmNewPassword)
+            {
+                return BadRequest("New password and confirmation do not match");
+            }
+
+            // Hash and set the new password
+            user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+            user.UpdatedAt = DateTime.Now;
+            _context.SaveChanges();
+
+            return Ok("Password changed successfully");
+        }
+
+
+        /*[HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                // Log for debugging
+                _logger.LogInformation($"Forgot password requested for non-existing email: {email}");
+                return Ok(); // You might want to return NotFound() here
+            }
+
+            // Generate reset token
+            user.ResetToken = Guid.NewGuid().ToString();
+            user.ResetTokenExpires = DateTime.UtcNow.AddHours(24); // Token expires in 24 hours
+            await _context.SaveChangesAsync();
+
+            // Send the email
+            try
+            {
+                await _emailService.SendPasswordResetEmail(user.Email, user.ResetToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending password reset email");
+                // Consider how you want to handle this error. Perhaps return a different status code.
+            }
+
+            return Ok();
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(string token, string newPassword)
+        {
+            var user = await _context.Users
+                .SingleOrDefaultAsync(u => u.ResetToken == token && u.ResetTokenExpires > DateTime.UtcNow);
+
+            if (user == null) return BadRequest("Invalid or expired token");
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            user.ResetToken = null;
+            user.ResetTokenExpires = null;
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }*/
 
         [HttpGet]
         public ActionResult<IEnumerable<object>> GetAll(string? search)
@@ -243,32 +348,32 @@ namespace UPlay.Controllers
             return Ok(data);
         }
 
-        //       [HttpPut("{id}"), Authorize]
-        //public IActionResult UpdateUserDetails(int id, [FromBody] UserDTO userDTO)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+     [HttpPut("{id}"), Authorize]
+         public IActionResult UpdateUserDetails(int id, [FromBody] UserDTO userDTO)
+        {
+           if (!ModelState.IsValid)
+          {
+               return BadRequest(ModelState);
+           }
 
-        //    var myUser = _context.Users.Find(id);
-        //    if (myUser == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var myUser = _context.Users.Find(id);
+            if (myUser == null)
+            {
+                return NotFound();
+            }
 
-        //    myUser.FirstName = userDTO.FirstName?.Trim() ?? myUser.FirstName;
-        //    myUser.LastName = userDTO.LastName?.Trim() ?? myUser.LastName;
-        //    myUser.Username = userDTO.Username?.Trim() ?? myUser.Username;
-        //    myUser.ContactNumber = userDTO.ContactNumber?.Trim() ?? myUser.ContactNumber;
-        //    myUser.Address1 = userDTO.Address1?.Trim() ?? myUser.Address1;
-        //    myUser.Address2 = userDTO.Address2?.Trim() ?? myUser.Address2;
-        //    myUser.UpdatedAt = DateTime.Now;
+        myUser.FirstName = userDTO.FirstName?.Trim() ?? myUser.FirstName;
+        myUser.LastName = userDTO.LastName?.Trim() ?? myUser.LastName;
+        myUser.Username = userDTO.Username?.Trim() ?? myUser.Username;
+        myUser.ContactNumber = userDTO.ContactNumber?.Trim() ?? myUser.ContactNumber;
+        myUser.Address1 = userDTO.Address1?.Trim() ?? myUser.Address1;
+        myUser.Address2 = userDTO.Address2?.Trim() ?? myUser.Address2;
+        myUser.UpdatedAt = DateTime.Now;
 
-        //    _context.SaveChanges();
+        _context.SaveChanges();
 
-        //    return Ok();
-        //}
+        return Ok();
+}
 
         [HttpDelete("{id}"), Authorize]
         public IActionResult DeleteUser(int id)
@@ -288,24 +393,3 @@ namespace UPlay.Controllers
     }
 }
 
-
-/*        [HttpPut("{id}")]
-        public IActionResult UpdateUserDetails(int id, User user)
-        {
-            var myUser = _context.Users.Find(id);
-            if (myUser == null)
-            {
-                return NotFound();
-            }
-
-            myUser.FirstName = user.FirstName.Trim();
-            myUser.LastName = user.LastName.Trim();
-            myUser.Username = user.Username.Trim();
-            myUser.ContactNumber = user.ContactNumber;
-            myUser.Address1= user.Address1;
-            myUser.Address2 = user.Address2;
-            myUser.Password = user.Password.Trim();
-            myUser.UpdatedAt = DateTime.Now;
-            _context.SaveChanges();
-            return Ok();
-        }*/

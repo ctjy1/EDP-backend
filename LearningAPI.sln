@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAPI", "LearningAPI\LearningAPI.csproj", "{0C2141A1-AEA2-4DB9-BA54-3D2609822C4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uplay", "LearningAPI\Uplay.csproj", "{0C2141A1-AEA2-4DB9-BA54-3D2609822C4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

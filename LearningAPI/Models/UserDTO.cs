@@ -37,6 +37,6 @@ namespace UPlay.Models
         [MaxLength(100)]
         public string? Address2 { get; set; } // Nullable string
 
-
+        
     }
 }

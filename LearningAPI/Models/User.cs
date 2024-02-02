@@ -60,6 +60,8 @@ namespace UPlay.Models
         public DateTime CreatedAt { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
+        public string? ResetToken { get; set; }
+        public DateTime? ResetTokenExpires { get; set; }
 
         public void GenerateReferralCode()
         {
@@ -90,6 +92,8 @@ namespace UPlay.Models
         [JsonIgnore]
         public List<Gallery>? Galleries { get; set; }
         public List<ReferralTracking>? ReferralTrackings { get; set; }
+
+        public ICollection<ReferralTracking> ReferredUsers { get; set; }
 
 
     }

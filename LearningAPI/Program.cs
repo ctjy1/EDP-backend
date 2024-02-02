@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
-using LearningAPI;
+using UPlay.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +53,8 @@ builder.Services
     };
 });
 
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -78,7 +80,8 @@ builder.Services.AddSwaggerGen(options =>
 { securityScheme, new List<string>() }
 });
 });
-
+builder.Services.AddScoped<UserService>();
+builder.Services.AddTransient<EmailService, EmailService>();
 
 var app = builder.Build();
 

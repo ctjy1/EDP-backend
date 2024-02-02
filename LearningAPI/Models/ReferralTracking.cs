@@ -1,15 +1,19 @@
-﻿namespace UPlay.Models
+﻿using UPlay.Models;
+
+namespace UPlay.Models
 {
     public class ReferralTracking
     {
         public int Id { get; set; }
         public string? Status { get; set; }
 
-        // Foreign key property
+        // Foreign key property for the referred user
         public int UserId { get; set; }
+        public User User { get; set; }
 
-        // Navigation property to represent the one-to-many relationship
-        public User? User { get; set; }
+        public int? ReferringUserId { get; set; }
+        public User ReferringUser { get; set; }
+
 
         // Properties obtained from the associated user
         public string Username => User?.Username ?? string.Empty;
@@ -18,4 +22,5 @@
         public string ReferredCode => User?.ReferredCode ?? string.Empty;
         public DateTime CreatedAt => User?.CreatedAt ?? DateTime.MinValue;
     }
+
 }

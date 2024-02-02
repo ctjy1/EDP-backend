@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using LearningAPI.Models;
-using UPlay.Models;
+using Uplay.Models;
+using Uplay.Models;
 
-namespace UPlay
+namespace Uplay
 {
     public class MappingProfile : Profile
     {
