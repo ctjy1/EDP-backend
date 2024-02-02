@@ -1,15 +1,17 @@
 ﻿using AutoMapper;
-using LearningAPI.Models;
+using Uplay.Models;
+using Uplay.Models;
 
-namespace LearningAPI
+namespace Uplay
 {
     public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            CreateMap<Tutorial, TutorialDTO>();
-            CreateMap<User, UserDTO>();
+            CreateMap<Gallery, GalleryDTO>();
             CreateMap<User, UserBasicDTO>();
+            CreateMap<User, UserDTO>();
         }
+
     }
 }
