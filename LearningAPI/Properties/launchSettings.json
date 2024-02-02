@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "LearningAPI": {
+    "Uplay": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

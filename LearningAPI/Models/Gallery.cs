@@ -1,25 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
-namespace LearningAPI.Models
+namespace UPlay.Models
 {
-    public class Tutorial
+    public class Gallery
     {
         public int Id { get; set; }
 
         [Required, MinLength(3), MaxLength(100)]
         public string Title { get; set; } = string.Empty;
-
         [Required, MinLength(3), MaxLength(500)]
-        public string Description { get; set; } = string.Empty;
+        public string Caption { get; set; } = string.Empty;
+        [MinLength(3), MaxLength(500)]
+        public string Location { get; set; } = string.Empty;
 
         [MaxLength(20)]
         public string? ImageFile { get; set; }
 
         [Column(TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }
-
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
 
