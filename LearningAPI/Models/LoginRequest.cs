@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace UPlay.Models
+namespace Uplay.Models
 {
     public class LoginRequest
     {

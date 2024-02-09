@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using UPlay.Models;
+using Uplay.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace UPlay.Controllers
+namespace Uplay.Controllers
 {
     [ApiController]
     [Route("[controller]")]

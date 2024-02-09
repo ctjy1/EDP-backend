@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace UPlay.Models
+namespace Uplay.Models
 {
     public class UserDTO
     {

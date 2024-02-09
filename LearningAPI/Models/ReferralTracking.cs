@@ -1,6 +1,6 @@
-﻿using UPlay.Models;
+﻿using Uplay.Models;
 
-namespace UPlay.Models
+namespace Uplay.Models
 {
     public class ReferralTracking
     {

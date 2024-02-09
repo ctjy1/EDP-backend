@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using UPlay.Models;
+using Uplay.Models;
+using Uplay;
+using Uplay.Models;
 
-namespace UPlay
+namespace Uplay
 {
     public class MyDbContext : DbContext
     {
@@ -47,5 +49,7 @@ namespace UPlay
         public DbSet<Gallery> Galleries { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ReferralTracking> ReferralTrackings { get; set; }
+
+        public DbSet<Reward> Rewards { get; set; }
     }
 }

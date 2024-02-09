@@ -1,4 +1,4 @@
-﻿using UPlay.Models;
+﻿using Uplay.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,9 +10,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using SendGrid.Helpers.Mail;
 using SendGrid;
-using UPlay.Services;
+// using Uplay.Services;
 
-namespace UPlay.Controllers
+namespace Uplay.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -22,8 +22,8 @@ namespace UPlay.Controllers
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         //private readonly ILogger _logger;
-        private readonly UserService _userService;
-        private readonly EmailService _emailService;
+        //private readonly UserService _userService;
+        //private readonly EmailService _emailService;
 
         public UserController(MyDbContext context, IConfiguration configuration, IMapper mapperr /*, UserService userService, EmailService emailService,, ILogger logger*/)
         {

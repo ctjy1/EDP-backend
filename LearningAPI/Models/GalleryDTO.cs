@@ -1,4 +1,4 @@
-﻿namespace UPlay.Models
+﻿namespace Uplay.Models
 {
     public class GalleryDTO
     {

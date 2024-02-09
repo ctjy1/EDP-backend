@@ -1,10 +1,11 @@
-using UPlay;
+using Uplay;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
-using UPlay.Services;
+//using Uplay.Services;
+using Uplay;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,8 +81,8 @@ builder.Services.AddSwaggerGen(options =>
 { securityScheme, new List<string>() }
 });
 });
-builder.Services.AddScoped<UserService>();
-builder.Services.AddTransient<EmailService, EmailService>();
+// builder.Services.AddScoped<UserService>();
+// builder.Services.AddTransient<EmailService, EmailService>();
 
 var app = builder.Build();
 

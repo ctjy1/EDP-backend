@@ -11,6 +11,7 @@ namespace Uplay
             CreateMap<Gallery, GalleryDTO>();
             CreateMap<User, UserBasicDTO>();
             CreateMap<User, UserDTO>();
+            CreateMap<Reward, RewardDTO>();
         }
 
     }
