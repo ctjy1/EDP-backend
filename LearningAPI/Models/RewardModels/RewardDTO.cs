@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Uplay.Models
+namespace Uplay.Models.RewardModels
 {
     public class RewardDTO
     {

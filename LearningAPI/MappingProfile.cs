@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Uplay.Models;
-using Uplay.Models;
+using Uplay.Models.RewardModels;
 
 namespace Uplay
 {

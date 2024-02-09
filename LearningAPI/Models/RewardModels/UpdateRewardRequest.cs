@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Uplay.Models
+namespace Uplay.Models.RewardModels
 {
-    public class AddRewardRequest
+    public class UpdateRewardRequest
     {
         [Required, MinLength(3), MaxLength(100)]
         public string RewardName { get; set; } = string.Empty;

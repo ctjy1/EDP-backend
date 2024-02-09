@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Uplay.Models;
 using Uplay;
-using Uplay.Models;
+using Uplay.Models.BudgetModels;
+using Uplay.Models.RewardModels;
 
 namespace Uplay
 {
@@ -46,10 +47,18 @@ namespace Uplay
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
+        // user databases
         public DbSet<Gallery> Galleries { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ReferralTracking> ReferralTrackings { get; set; }
 
-        public DbSet<Reward> Rewards { get; set; }
+        // budget databases
+		public DbSet<Cart> Carts { get; set; }
+		public DbSet<Order> Orders { get; set; }
+		public DbSet<OrderDetails> OrderDetails { get; set; }
+		public DbSet<UserBudget> UserBudget { get; set; }
+
+        // reward databases
+		public DbSet<Reward> Rewards { get; set; }
     }
 }

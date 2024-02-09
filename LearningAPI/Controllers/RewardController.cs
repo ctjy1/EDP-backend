@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Uplay.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Uplay;
+using Uplay.Models.RewardModels;
 
 namespace Uplay.Controllers
 {

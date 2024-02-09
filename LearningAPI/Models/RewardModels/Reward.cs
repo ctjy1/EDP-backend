@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Uplay.Models
+namespace Uplay.Models.RewardModels
 {
     public class Reward
     {

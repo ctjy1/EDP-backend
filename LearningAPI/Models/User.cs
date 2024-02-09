@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Google.Protobuf.WellKnownTypes;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Text.Json.Serialization;
+using Uplay.Models.BudgetModels;
+using Uplay.Models.RewardModels;
+
 namespace Uplay.Models
 {
     public class User
@@ -95,6 +99,16 @@ namespace Uplay.Models
 
         public ICollection<ReferralTracking> ReferredUsers { get; set; }
 
+        // Navigation property to represent the one-to-many relationship
+		[JsonIgnore]
 
-    }
+		public List<Cart>? Carts { get; set; }
+
+
+		// Navigation property to represent the one-to-many relationship
+		public List<Order>? Orders { get; set; }
+
+        public List<Reward> Rewards { get; set; }
+
+	}
 }
