@@ -1,4 +1,4 @@
-﻿namespace Uplay.Models
+﻿namespace UPlay.Models
 {
     public class AuthResponse
     {

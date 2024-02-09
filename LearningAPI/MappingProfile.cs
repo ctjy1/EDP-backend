@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Uplay.Models;
+using Uplay.Models;
 
 namespace Uplay
 {
@@ -7,9 +8,10 @@ namespace Uplay
     {
         public MappingProfile()
         {
-            CreateMap<Reward, RewardDTO>();
-            CreateMap<User, UserDTO>();
+            CreateMap<Gallery, GalleryDTO>();
             CreateMap<User, UserBasicDTO>();
+            CreateMap<User, UserDTO>();
         }
+
     }
 }
