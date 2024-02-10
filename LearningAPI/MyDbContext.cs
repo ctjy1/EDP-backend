@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Uplay.Models;
-using Uplay;
 using Uplay.Models.BudgetModels;
 using Uplay.Models.RewardModels;
+using Uplay.Models.SurveyModels;
+using Uplay.Models.ActivityModels;
 
 namespace Uplay
 {
@@ -60,5 +60,13 @@ namespace Uplay
 
         // reward databases
 		public DbSet<Reward> Rewards { get; set; }
-    }
+
+		// feedback & survey databases
+		public DbSet<Cust_Feedback> Customer_Feedback { get; set; }
+		public DbSet<Cust_Survey> Customer_Surveys { get; set; }
+
+		// activity databases
+
+		public DbSet<Activity> Activitys { get; set; }
+	}
 }

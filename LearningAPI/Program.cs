@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
 //using Uplay.Services;
-using Uplay;
 
 var builder = WebApplication.CreateBuilder(args);
 

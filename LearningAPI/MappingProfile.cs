@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Uplay.Models;
+using Uplay.Models.ActivityModels;
 using Uplay.Models.RewardModels;
 
 namespace Uplay
@@ -12,7 +13,8 @@ namespace Uplay
             CreateMap<User, UserBasicDTO>();
             CreateMap<User, UserDTO>();
             CreateMap<Reward, RewardDTO>();
-        }
+			CreateMap<Activity, ActivityDTO>();
+		}
 
     }
 }
